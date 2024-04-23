@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "fir-satrting": {
+      "hosting": {
+        "firebase-starting": [
+          "fir-satrting"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "fir-satrting"
+  }
+}
