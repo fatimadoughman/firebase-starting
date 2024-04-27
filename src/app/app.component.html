@@ -1,19 +1,37 @@
 <div class="w-full h-full items-center flex">
-  <div class="todo-container flex ">
+  <div class="todo-container">
     <h1>To Do List!</h1>
-    <input #newNote class="todo-input" placeholder="Add a new note">
-    <button class="add-button" (click)="addnotes(newNote.value)">Add Note</button>
+    <div class="input-container">
+      <input #newNote class="todo-input" placeholder="Add a new note">
+      <label for="uploadInput" class="upload-icon">
+        Choose File
+        <input type="file" id="uploadInput" style="width: 40px;" (change)="uploadImage($event)">
+      </label>
+      <p class="image-name">{{ uploadedImageName }}</p>
+    </div>
+    <div class="buttons">
+      <button class="add-button" (click)="addNoteWithImage(newNote.value, selectedImageFile!)">Add Note</button>
+    </div>
+    <input type="text" class="todo-input"  [(ngModel)]="filterText" style="width: 200px; height: 10px; margin-bottom: 10px;" placeholder="search for a note!">
+
     <div class="todo-list">
-        @for (item of notes; track item) {
-           <ul>
+      @for (item of notes; track item) {
+
         <li>
-           <input type="checkbox" class="todo-checkbox">
-           <span>{{ item.content }}</span>
-           <button class="add-button" (click)="deleteNote(item.id)">Delete</button>
+          <input type="checkbox" class="todo-checkbox">
+          <span>{{ item.content }}</span>
+          @if (!item.editMode) {
+            <span>{{ item.content }}</span>}
+@else {
+            <input type="text" [(ngModel)]="item.content" class="edit-input">
+   }
+          @if (item.type === 'note' && item.imagePath) {<img  [src]="item.imagePath" alt="Uploaded Image" class="uploaded-image">}
+          <button class="add-button" (click)="toggleEditMode(item)">
+            {{ item.editMode ? 'Cancel' : 'Edit Note' }}
+          </button>
+          <button class="add-button" (click)="deleteNoteWithImage(item.noteId)">Delete Note</button>
         </li>
-      </ul>
-    }
+      }
     </div>
   </div>
-  </div>
-
+</div>

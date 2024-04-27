@@ -3,7 +3,9 @@ import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { SharedService } from './shared.service';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyC9GWF7C-RJurwktrJvuqDAiMTWUOqgwmE",
@@ -16,7 +18,7 @@ const firebaseConfig = {
 };
 
 @NgModule({
-  imports: [
+  imports: [AngularFireStorageModule,
     BrowserModule,
     provideFirebaseApp(() => initializeApp(firebaseConfig)),
     provideFirestore(() => getFirestore()),
