@@ -21,47 +21,54 @@ export class AppComponent {
   ngOnInit(): void {
     this.refreshNotes();
   }
-
   refreshNotes() {
     this.sharedService.getCombinedData().subscribe((res) => {
       this.notes = res;
     });
   }
-
   uploadImage(event: any) {
     const file = event.target.files[0];
     this.uploadedImageName = file.name;
     this.selectedImageFile = file;
   }
-
   addNoteWithImage(newNote: string, selectedImageFile: File) {
     if (!newNote.trim() || !selectedImageFile) {
       return;
     }
-
     this.sharedService.addNoteWithImage(newNote, selectedImageFile).then((noteWithImage) => {
       this.notes.push(noteWithImage);
     });
   }
-
   deleteNoteWithImage(noteId: string): void {
     this.sharedService.deleteNoteWithImage(noteId)
       .then(() => {
         this.refreshNotes();
       })
-      .catch(error => {
-        console.error("Error deleting note with image:", error);
-      });
+  }
+  toggleEditMode(note: any) {
+    note.editMode = !note.editMode;
+  }
+  uploadNewImage(event: any, note: any) {
+    const file = event.target.files[0];
+    note.newImage = file;
+  }
+  saveChanges(note: any) {
+    const { id, content, newImage } = note;
+    this.sharedService.updateNoteWithImage(id, content, newImage).then(() => {
+      note.editMode = false;
+      note.content = content;
+    });
   }
 
-  filterText: string = '';
-  toggleEditMode(item: any) {
-    item.editMode = !item.editMode;
-  }
 
-  saveChanges(item: any) {
-    this.sharedService.updateNote(item.id, item.content).then(() => {
-      item.editMode = false;
+
+
+  searchText: string = ''; // Property to hold the search text
+
+  // Function to filter notes based on search text
+  filterNotes() {
+    return this.notes.filter((note) => {
+      return note.content.toLowerCase().includes(this.searchText.toLowerCase());
     });
   }
 }

@@ -12,26 +12,31 @@
     <div class="buttons">
       <button class="add-button" (click)="addNoteWithImage(newNote.value, selectedImageFile!)">Add Note</button>
     </div>
-    <input type="text" class="todo-input"  [(ngModel)]="filterText" style="width: 200px; height: 10px; margin-bottom: 10px;" placeholder="search for a note!">
-
+    <input type="text" class="todo-input"  [(ngModel)]="searchText" style="width: 200px; height: 10px; margin-bottom: 10px;" placeholder="search for a note!">
     <div class="todo-list">
-      @for (item of notes; track item) {
-
+      @for (item of filterNotes(); track item) {
         <li>
           <input type="checkbox" class="todo-checkbox">
-          <span>{{ item.content }}</span>
           @if (!item.editMode) {
-            <span>{{ item.content }}</span>}
-@else {
-            <input type="text" [(ngModel)]="item.content" class="edit-input">
-   }
-          @if (item.type === 'note' && item.imagePath) {<img  [src]="item.imagePath" alt="Uploaded Image" class="uploaded-image">}
-          <button class="add-button" (click)="toggleEditMode(item)">
-            {{ item.editMode ? 'Cancel' : 'Edit Note' }}
-          </button>
-          <button class="add-button" (click)="deleteNoteWithImage(item.noteId)">Delete Note</button>
+            <span>{{ item.content }}</span>
+
+          @if (item.type === 'note' && item.imagePath) {
+            <img  [src]="item.imagePath" alt="Uploaded Image" class="uploaded-image">}}@else { <input type="text" [(ngModel)]="item.content" class="todo-input">
+          <label for="newImageInput">
+            Choose New Image
+            <input type="file" id="newImageInput" (change)="uploadNewImage($event, item)">
+          </label>   <button class="add-button" (click)="saveChanges(item)">Save</button>}
+            <button class="add-button" (click)="toggleEditMode(item)">Edit</button>
+         <button class="add-button" (click)="deleteNoteWithImage(item.id)">Delete Note</button>
+
+
+
+
         </li>
       }
     </div>
   </div>
 </div>
+
+
+
